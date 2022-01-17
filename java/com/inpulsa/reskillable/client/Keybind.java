@@ -27,6 +27,5 @@ public class Keybind {
         if (this.openKey.isDown() && minecraft.screen == null) {
             minecraft.screen = new SkillScreen();
         }
-
     }
 }

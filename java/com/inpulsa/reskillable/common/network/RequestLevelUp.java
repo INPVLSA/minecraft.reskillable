@@ -33,7 +33,7 @@ public class RequestLevelUp {
                 SkillModel skillModel = SkillModel.get(player);
                 Skill skill = Skill.values()[this.skill];
                 int skillLevel = skillModel.getSkillLevel(skill);
-                int cost = this.calculateLevelUpCost(skillLevel);
+                int cost = RequestLevelUp.calculateLevelUpCost(skillLevel);
 
                 if (this.isLevelCanBeUpped(player, skillLevel, cost)) {
                     if (!player.isCreative()) {
@@ -50,7 +50,7 @@ public class RequestLevelUp {
         (context.get()).setPacketHandled(true);
     }
 
-    private int calculateLevelUpCost(int skillLevel) {
+    public static int calculateLevelUpCost(int skillLevel) {
         return Configuration.getStartCost() + (skillLevel - 1) * Configuration.getCostIncrease();
     }
 
