@@ -20,9 +20,9 @@ public class SkillButton extends Button {
     private interface BackgroundPositions {
         int RESOURCE_OFFSET_X = 176;
         int RESOURCE_OFFSET_Y = 0;
-        int RESOURCE_MAX_LEVEL_OFFSET_X = 176;
+        int RESOURCE_MAX_LEVEL_OFFSET_X = 175;
         int RESOURCE_MAX_LEVEL_OFFSET_Y = 64;
-        int WIDTH = 78;
+        int WIDTH = 79;
         int HEIGHT = 32;
     }
 
@@ -43,24 +43,9 @@ public class SkillButton extends Button {
         } else {
             this.renderDefaultBg(stack);
         }
+        this.renderIcon(stack, level);
         this.drawButtonTitle(stack, minecraft.font);
         this.drawButtonLevels(stack, minecraft.font, level, maxLevel);
-
-//        if (this.isMouseOver(mouseX, mouseY) && level < maxLevel) {
-//            int upCost = RequestLevelUp.calculateLevelUpCost(level);
-//
-//            if (minecraft.player != null) {
-//                // ? GREEN : RED
-//
-//            }
-//        }
-//        int u = ((int)Math.ceil((double)level * 4.0D / (double)maxLevel) - 1) * 16 + 176;
-//        int v = this.skill.index * 16 + 128;
-
-//        this.blit(stack, this.x, this.y, 176, (level == maxLevel ? 64 : 0) + (this.isMouseOver(mouseX, mouseY) ? 32 : 0), this.width, this.height);
-//        this.blit(stack, this.x + 6, this.y + 8, u, v, 16, 16);
-//        minecraft.font.draw(stack, new TranslatableComponent(this.skill.displayName), (float)(this.x + 25), (float)(this.y + 7), 16777215);
-//        minecraft.font.draw(stack, level + "/" + maxLevel, (float)(this.x + 25), (float)(this.y + 18), 12500670);
 
         if (this.isMouseOver(mouseX, mouseY) && level < maxLevel) {
             this.drawIncreaseCost(stack, minecraft, level);
@@ -91,8 +76,8 @@ public class SkillButton extends Button {
             int colour = minecraft.player.experienceLevel >= cost ? 8322080 : 16536660;
             String text = Integer.toString(cost);
 
-            int posX = this.x + 73 - minecraft.font.width(text);
-            int posY = this.y + 18;
+            int posX = this.x + 78 - minecraft.font.width(text);
+            int posY = this.y + 25;
             minecraft.font.draw(stack, text, posX, posY, colour);
         }
     }
@@ -108,13 +93,12 @@ public class SkillButton extends Button {
     protected void renderMaxLevelBg(PoseStack stack) {
         this.renderBg(
             stack,
-            BackgroundPositions.RESOURCE_MAX_LEVEL_OFFSET_X,
+            BackgroundPositions.RESOURCE_MAX_LEVEL_OFFSET_X + 1,
             BackgroundPositions.RESOURCE_MAX_LEVEL_OFFSET_Y
         );
     }
 
     protected void renderBg(PoseStack stack, int offsetX, int offsetY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
 
@@ -126,6 +110,21 @@ public class SkillButton extends Button {
             offsetY,
             BackgroundPositions.WIDTH,
             BackgroundPositions.HEIGHT
+        );
+    }
+
+    protected void renderIcon(PoseStack stack, int level) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
+
+        this.blit(
+            stack,
+            this.x + 6 + 5,
+            this.y + 8 + 8,
+            SkillScreen.SkillIconTextureResolver.getTexturePosX(level),
+            SkillScreen.SkillIconTextureResolver.getTexturePosY(this.skill),
+            SkillScreen.IconTextureParams.WIDTH,
+            SkillScreen.IconTextureParams.HEIGHT
         );
     }
 

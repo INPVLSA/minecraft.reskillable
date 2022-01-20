@@ -23,11 +23,11 @@ public class TabButton extends Button {
     }
 
     public interface IconTextureCoordinates {
-        int START_X = 240;
-        int INVENTORY_Y = 130;
-        int SKILL_Y = 145;
-        int WIDTH = 14;
-        int HEIGHT = 13;
+        int WIDTH = 16;
+        int HEIGHT = 16;
+        int START_X = 0;
+        int INVENTORY_Y = 195;
+        int SKILL_Y = INVENTORY_Y + 16;
     }
 
     public TabButton(int posX, int posY, TabButton.TabType type, boolean selected) {
@@ -71,11 +71,11 @@ public class TabButton extends Button {
     protected void renderIcon(PoseStack stack) {
         this.blit(
                 stack,
-                this.x + 7,
+                this.x + 10 - (this.selected ? 2 : 0),
                 this.y + 7,
                 IconTextureCoordinates.START_X,
                 this.type == TabType.INVENTORY ? IconTextureCoordinates.INVENTORY_Y : IconTextureCoordinates.SKILL_Y,
-                IconTextureCoordinates.WIDTH,
+                IconTextureCoordinates.WIDTH * (this.width > 0 ? 1 : 0),
                 IconTextureCoordinates.HEIGHT
         );
     }
@@ -96,6 +96,16 @@ public class TabButton extends Button {
                 }
             }
         }
+    }
+
+    public void hide() {
+        this.setWidth(0);
+    }
+
+    public void show() {
+        this.setWidth(
+            this.selected ? BackgroundTextureCoordinates.WIDTH_SELECTED : BackgroundTextureCoordinates.WIDTH
+        );
     }
 
     public enum TabType {

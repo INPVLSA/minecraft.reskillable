@@ -3,19 +3,50 @@ package com.inpulsa.reskillable.client.screen;
 import com.inpulsa.reskillable.Reskillable;
 import com.inpulsa.reskillable.client.screen.buttons.SkillButton;
 import com.inpulsa.reskillable.common.skills.Skill;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class SkillScreen extends Screen {
     public static final ResourceLocation RESOURCES = new ResourceLocation(
             Reskillable.MOD_ID,
             "textures/gui/skills.png"
     );
+
+    public interface IconTextureParams {
+        int OFFSET_X = 176;
+        int OFFSET_Y = 128;
+        int WIDTH = 16;
+        int HEIGHT = 16;
+    }
+
+    public static class SkillIconTextureResolver {
+        public static int LEVEL_STEP = 8;
+
+        private static int calculateIconLevel(int skillLevel) {
+            BigDecimal rawValue = new BigDecimal(skillLevel / LEVEL_STEP);
+
+            return rawValue.setScale(1, RoundingMode.DOWN).intValue();
+        }
+
+        public static int getTexturePosX(int level) {
+            return IconTextureParams.OFFSET_X + (calculateIconLevel(level) * IconTextureParams.WIDTH);
+        }
+
+        public static int getTexturePosY(Skill skill) {
+            return IconTextureParams.OFFSET_Y + (skill.index * IconTextureParams.HEIGHT);
+        }
+    }
 
     public SkillScreen() {
         super(new TranslatableComponent("container.skills"));
@@ -89,5 +120,26 @@ public class SkillScreen extends Screen {
 
     protected int getTopOffset() {
         return (this.height - 166) / 2;
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int p_96553_, int p_96554_) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.screen != null) {
+            if (keyCode == InputConstants.KEY_E) {
+                if (minecraft.player != null) {
+                    minecraft.setScreen(new InventoryScreen(minecraft.player));
+
+                    return false;
+                }
+            } else if (keyCode == InputConstants.KEY_G) {
+                minecraft.screen.onClose();
+
+                return false;
+            }
+        }
+
+        return super.keyPressed(keyCode, p_96553_, p_96554_);
     }
 }

@@ -3,7 +3,7 @@ loaderVersion="[39,)"
 license="All rights reserved"
 [[mods]]
 modId="reskillable"
-version="3.0"
+version="3.0.1"
 displayName="Reskillable Reborn"
 logoFile="reskillable.png"
 credits=""
@@ -13,10 +13,10 @@ Reskillable is a mod about leveling various skills up, using XP.
 Leveling skills up allow you to unlock traits and use more items.
 By default, a lot of vanilla items are locked to require leveling your skills up
 '''
-[[dependencies.reskillable]] #optional
-    modId="forge" #mandatory
-    mandatory=true #mandatory
-    versionRange="[39,)" #mandatory
+[[dependencies.reskillable]]
+    modId="forge"
+    mandatory=true
+    versionRange="[39,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.reskillable]]

@@ -31,8 +31,6 @@ public class Reskillable {
         MinecraftForge.EVENT_BUS.register(new Commands());
 
         new Network().registerNetwork();
-
-        // TODO:: curios mode capability
     }
 
     private void clientSetup(FMLClientSetupEvent event) {

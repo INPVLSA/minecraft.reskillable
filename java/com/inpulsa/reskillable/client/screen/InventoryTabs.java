@@ -23,7 +23,7 @@ public class InventoryTabs {
         if (this.isAffectedScreen(screen)) {
             boolean isCreativeOpen = screen instanceof CreativeModeInventoryScreen;
             boolean skillsOpen = screen instanceof SkillScreen;
-            int posX = (screen.width - (isCreativeOpen ? 195 : 176)) / 2 - 29;
+            int posX = (screen.width - (isCreativeOpen ? 195 : 176)) / 2 - 28;
             int posY = (screen.height - (isCreativeOpen ? 136 : 166)) / 2;
             int buttonsPaddingY = 7;
 
@@ -39,6 +39,12 @@ public class InventoryTabs {
                     TabButton.TabType.SKILLS,
                     skillsOpen
             );
+
+            if (screen instanceof InventoryScreen inventoryScreen
+                && inventoryScreen.getRecipeBookComponent().isVisible()
+            ) {
+                return;
+            }
             screen.renderables.add(inventoryButton);
             screen.renderables.add(skillsButton);
 
@@ -62,11 +68,29 @@ public class InventoryTabs {
         event.setCanceled(true);
     }
 
-    // TODO:: TabButton::onPress doesn't works. Bad way to trigger it on click
     @SubscribeEvent
     public void mouseClicked(ScreenEvent.MouseClickedEvent.Post event) {
         Screen screen = event.getScreen();
 
+        if (screen instanceof InventoryScreen inventoryScreen) {
+            // Hide tabs on RecipeBookComponent opening
+            if (inventoryScreen.getRecipeBookComponent().isVisible()) {
+                for (Widget button: screen.renderables) {
+                    if (button instanceof TabButton tabButton) {
+                        tabButton.hide();
+                    }
+                }
+            } else {
+                // Restoring tabs after closing RecipeBookComponent
+                for (Widget button: screen.renderables) {
+                    if (button instanceof TabButton tabButton) {
+                        tabButton.show();
+                    }
+                }
+            }
+        }
+
+        // TabButton::onPress doesn't work. Bad way to trigger it on click
         if (this.isAffectedScreen(screen)) {
             for (Widget button: screen.renderables) {
                 if (button instanceof TabButton tabButton) {

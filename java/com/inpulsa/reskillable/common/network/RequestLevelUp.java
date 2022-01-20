@@ -37,7 +37,7 @@ public class RequestLevelUp {
 
                 if (this.isLevelCanBeUpped(player, skillLevel, cost)) {
                     if (!player.isCreative()) {
-                        player.setExperienceLevels(-cost);
+                        player.giveExperienceLevels(-cost);
                     }
 
                     skillModel.increaseSkillLevel(skill);

@@ -4,6 +4,7 @@ import com.inpulsa.reskillable.client.screen.SkillScreen;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -17,6 +18,7 @@ public class Keybind {
 
     public Keybind() {
         this.openKey = new KeyMapping(ID, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, 71, CATEGORY);
+
         ClientRegistry.registerKeyBinding(this.openKey);
     }
 
@@ -24,8 +26,12 @@ public class Keybind {
     public void onKeyInput(KeyInputEvent event) {
         Minecraft minecraft = Minecraft.getInstance();
 
-        if (this.openKey.isDown() && minecraft.screen == null) {
-            minecraft.screen = new SkillScreen();
+        if (this.openKey.isDown()) {
+            if (minecraft.screen == null || minecraft.screen instanceof InventoryScreen) {
+                minecraft.setScreen(new SkillScreen());
+            } else if (minecraft.screen instanceof SkillScreen) {
+                minecraft.screen.onClose();
+            }
         }
     }
 }

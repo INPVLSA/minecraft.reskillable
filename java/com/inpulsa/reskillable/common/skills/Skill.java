@@ -1,5 +1,7 @@
 package com.inpulsa.reskillable.common.skills;
 
+import java.util.HashMap;
+
 public enum Skill {
     MINING(0, "skill.mining"),
     GATHERING(1, "skill.gathering"),
@@ -13,7 +15,9 @@ public enum Skill {
     public final int index;
     public final String displayName;
 
-    private Skill(int index, String name) {
+    public HashMap<String, Integer> additionalSkills;
+
+    Skill(int index, String name) {
         this.index = index;
         this.displayName = name;
     }
