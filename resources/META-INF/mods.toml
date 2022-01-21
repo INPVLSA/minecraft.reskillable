@@ -3,7 +3,7 @@ loaderVersion="[39,)"
 license="All rights reserved"
 [[mods]]
 modId="reskillable"
-version="3.0.1"
+version="3.0.3"
 displayName="Reskillable Reborn"
 logoFile="reskillable.png"
 credits=""

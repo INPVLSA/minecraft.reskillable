@@ -15,8 +15,6 @@ public enum Skill {
     public final int index;
     public final String displayName;
 
-    public HashMap<String, Integer> additionalSkills;
-
     Skill(int index, String name) {
         this.index = index;
         this.displayName = name;

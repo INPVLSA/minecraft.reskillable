@@ -40,9 +40,8 @@ public class Configuration {
         costIncrease = COST_INCREASE.get();
         maximumLevel = MAXIMUM_LEVEL.get();
 
-        for (Object o : SKILL_LOCKS.get().stream().toList()) {
-            String line = (String) o;
-            String[] entry = line.split(" ");
+        for (String o : SKILL_LOCKS.get().stream().toList()) {
+            String[] entry = o.split(" ");
             Requirement[] requirements = new Requirement[entry.length - 1];
 
             for (int i = 1; i < entry.length; ++i) {
@@ -90,6 +89,7 @@ public class Configuration {
 
     static {
         Builder builder = new Builder();
+
         builder.comment("Disable wool drops to force the player to get shears.");
         DISABLE_WOOL = builder.define("disableWoolDrops", true);
         builder.comment("Reset all skills to 1 when a player dies.");
@@ -164,9 +164,7 @@ public class Configuration {
                         "minecraft:donkey agility:10",
                         "minecraft:mule agility:10",
                         "minecraft:strider agility:15"
-                ), (obj) -> {
-                    return true;
-                }
+                ), (obj) -> true
             );
         CONFIG_SPEC = builder.build();
     }

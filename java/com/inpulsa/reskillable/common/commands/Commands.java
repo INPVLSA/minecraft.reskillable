@@ -1,7 +1,8 @@
 package com.inpulsa.reskillable.common.commands;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -9,16 +10,20 @@ public class Commands {
     public Commands() {
     }
 
-    @SuppressWarnings("rawtypes")
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
-        LiteralArgumentBuilder<Object> argumentBuilder = LiteralArgumentBuilder.literal("skills");
-//        argumentBuilder.requires(Commands::registerCallback);
-//        argumentBuilder.then((ArgumentBuilder)SetCommand.register());
-//        argumentBuilder.then((ArgumentBuilder)GetCommand.register());
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+
+        LiteralArgumentBuilder<CommandSourceStack> commands = LiteralArgumentBuilder.literal("skill");
+
+        commands.then(SetCommand.register());
+        commands.then(GetCommand.register());
+
+        dispatcher.register(commands);
     }
 
-//    private static boolean registerCallback(Object source) {
+    private static boolean registerRequirement(Object source) {
+        return true;
 //        return source.hasPermissionLevel(2);
-//    }
+    }
 }

@@ -104,13 +104,13 @@ public class SkillScreen extends Screen {
         RenderSystem.setShaderTexture(0, RESOURCES);
 
         this.blit(
-            stack,
-            this.getLeftOffset(),
-            this.getTopOffset(),
-            BackgroundPositions.RESOURCE_OFFSET_X,
-            BackgroundPositions.RESOURCE_OFFSET_Y,
-            BackgroundPositions.WIDTH,
-            BackgroundPositions.HEIGHT
+                stack,
+                this.getLeftOffset(),
+                this.getTopOffset(),
+                BackgroundPositions.RESOURCE_OFFSET_X,
+                BackgroundPositions.RESOURCE_OFFSET_Y,
+                BackgroundPositions.WIDTH,
+                BackgroundPositions.HEIGHT
         );
     }
 
