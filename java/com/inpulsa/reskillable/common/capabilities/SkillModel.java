@@ -4,15 +4,17 @@ import com.inpulsa.reskillable.Configuration;
 import com.inpulsa.reskillable.common.network.NotifyWarning;
 import com.inpulsa.reskillable.common.skills.Requirement;
 import com.inpulsa.reskillable.common.skills.Skill;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class SkillModel implements INBTSerializable<CompoundTag> {
@@ -21,27 +23,28 @@ public class SkillModel implements INBTSerializable<CompoundTag> {
     public SkillModel() {
     }
 
-    public int getSkillLevel(Skill skill) {
+    public int getSkillLevel(@NotNull Skill skill) {
         return this.skillLevels[skill.index];
     }
 
-    public void setSkillLevel(Skill skill, int level) {
+    public void setSkillLevel(@NotNull Skill skill, int level) {
         this.skillLevels[skill.index] = level;
     }
 
-    public void increaseSkillLevel(Skill skill) {
+    public void increaseSkillLevel(@NotNull Skill skill) {
         this.skillLevels[skill.index]++;
     }
 
-    public boolean canUseItem(Player player, ItemStack item) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean canUseItem(Player player, @NotNull ItemStack item) {
         return this.canUse(player, item.getItem().getRegistryName());
     }
 
-    public boolean canUseBlock(Player player, Block block) {
+    public boolean canUseBlock(Player player, @NotNull Block block) {
         return this.canUse(player, block.getRegistryName());
     }
 
-    public boolean canUseEntity(Player player, Entity entity) {
+    public boolean canUseEntity(Player player, @NotNull Entity entity) {
         return this.canUse(player, entity.getType().getRegistryName());
     }
 
@@ -63,19 +66,17 @@ public class SkillModel implements INBTSerializable<CompoundTag> {
         return true;
     }
 
-    public static SkillModel get(Player player) {
-        return player.getCapability(SkillCapability.INSTANCE).orElseThrow(() -> {
-
-            throw new IllegalArgumentException("Player " + player.getName().getString() + " does not have a Skill Model!");
-        });
-    }
-
-    public static SkillModel get() {
+    public static @NotNull SkillModel get() {
         var player = Objects.requireNonNull(Minecraft.getInstance().player);
 
-        return player.getCapability(SkillCapability.INSTANCE).orElseThrow(() -> {
+        return SkillModel.get(player);
+    }
 
-            throw new IllegalArgumentException("Player does not have a Skill Model!");
+    public static @NotNull SkillModel get(@NotNull Player player) {
+        return player.getCapability(SkillCapability.INSTANCE).orElseThrow(() -> {
+            String name = player.getName().getString();
+
+            throw new IllegalArgumentException("Player " + name + " does not have a Skill Model!");
         });
     }
 
@@ -93,7 +94,7 @@ public class SkillModel implements INBTSerializable<CompoundTag> {
         return compound;
     }
 
-    public void deserializeNBT(CompoundTag compoundTag) {
+    public void deserializeNBT(@NotNull CompoundTag compoundTag) {
         this.skillLevels[0] = compoundTag.getInt("mining");
         this.skillLevels[1] = compoundTag.getInt("gathering");
         this.skillLevels[2] = compoundTag.getInt("attack");

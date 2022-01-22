@@ -13,7 +13,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -133,8 +132,16 @@ public class EventHandler {
     public void onEntityDrops(LivingDropsEvent event) {
         if (Configuration.getDisableWool() && event.getEntity() instanceof Sheep) {
             Collection<ItemEntity> drops = event.getDrops();
+            drops.removeIf(drop -> {
+                ResourceLocation itemRegistryName = drop.getItem().getItem().getRegistryName();
 
-            drops.removeIf(drop -> drop.getItem().getItem().getRegistryName().toString().equals("wool"));
+                if (itemRegistryName != null) {
+
+                    return itemRegistryName.toString().equals("wool");
+                }
+
+                return false;
+            });
         }
     }
 
@@ -153,7 +160,6 @@ public class EventHandler {
             event.addCapability(new ResourceLocation(Reskillable.MOD_ID, "cap_skills"), provider);
             event.addListener(provider::invalidate);
         }
-
     }
 
     @SubscribeEvent

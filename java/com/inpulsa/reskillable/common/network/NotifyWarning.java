@@ -34,9 +34,9 @@ public class NotifyWarning {
     }
 
     public static void send(Player player, ResourceLocation resource) {
-        Network.NETWORK.send(PacketDistributor.PLAYER.with(() -> {
-
-            return (ServerPlayer)player;
-        }), new NotifyWarning(resource));
+        Network.NETWORK.send(
+                PacketDistributor.PLAYER.with(() -> (ServerPlayer)player),
+                new NotifyWarning(resource)
+        );
     }
 }

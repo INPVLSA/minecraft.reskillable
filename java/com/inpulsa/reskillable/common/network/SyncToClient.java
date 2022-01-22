@@ -2,6 +2,7 @@ package com.inpulsa.reskillable.common.network;
 
 import com.inpulsa.reskillable.Network;
 import com.inpulsa.reskillable.common.capabilities.SkillModel;
+import com.inpulsa.reskillable.common.capabilities.SkillProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,9 +38,9 @@ public class SyncToClient {
     }
 
     public static void send(Player player) {
-        Network.NETWORK.send(PacketDistributor.PLAYER.with(() -> {
-
-            return (ServerPlayer)player;
-        }), new SyncToClient(SkillModel.get(player)));
+        Network.NETWORK.send(
+            PacketDistributor.PLAYER.with(() -> (ServerPlayer)player),
+            new SyncToClient(SkillModel.get(player))
+        );
     }
 }
