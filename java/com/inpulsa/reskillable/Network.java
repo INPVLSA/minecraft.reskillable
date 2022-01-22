@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Network {
     public static SimpleChannel NETWORK;
 
-    public void registerNetwork() {
+    public static void registerNetwork() {
         var resourceLocation = new ResourceLocation(Reskillable.MOD_ID, "main_channel");
 
         NETWORK = NetworkRegistry.newSimpleChannel(

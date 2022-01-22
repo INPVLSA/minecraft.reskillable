@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SkillProvider implements ICapabilitySerializable<CompoundTag> {
     private final SkillModel skillModel;
-    private final LazyOptional<SkillModel> optional;
+    private LazyOptional<SkillModel> optional;
 
     public SkillProvider(SkillModel skillModel) {
         this.skillModel = skillModel;
@@ -18,6 +18,7 @@ public class SkillProvider implements ICapabilitySerializable<CompoundTag> {
     }
 
     public void invalidate() {
+        this.optional.addListener(this::recreateCapability);
         this.optional.invalidate();
     }
 
@@ -26,6 +27,10 @@ public class SkillProvider implements ICapabilitySerializable<CompoundTag> {
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
 
         return capability == SkillCapability.INSTANCE ? this.optional.cast() : LazyOptional.empty();
+    }
+
+    public void recreateCapability(LazyOptional<SkillModel> lazy) {
+        this.optional = LazyOptional.of(() -> this.skillModel);
     }
 
     public CompoundTag serializeNBT() {
