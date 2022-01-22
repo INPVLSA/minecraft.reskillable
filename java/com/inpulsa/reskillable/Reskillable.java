@@ -30,7 +30,7 @@ public class Reskillable {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         MinecraftForge.EVENT_BUS.register(new Commands());
 
-        new Network().registerNetwork();
+        Network.registerNetwork();
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
